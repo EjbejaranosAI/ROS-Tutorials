@@ -1,0 +1,22 @@
+FROM osrf/ros:noetic-desktop-full
+
+# Install additional tools if needed
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure the workspace
+RUN mkdir -p /root/catkin_ws/src
+
+# Set working directory
+WORKDIR /root/catkin_ws
+
+# Initialize the workspace
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
+
+# Ensure the ROS environment is always sourced
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+
+# Default command
+CMD ["/bin/bash"]
